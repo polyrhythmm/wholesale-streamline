@@ -11,29 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103035228) do
+ActiveRecord::Schema.define(version: 20171104025252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "options", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer  "option_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "option_id",  limit: 8
     t.string   "name"
     t.integer  "position"
-    t.string   "image"
-    t.integer  "shop_id"
-    t.integer  "product_id"
+    t.integer  "shop_id",    limit: 8
+    t.integer  "product_id", limit: 8
   end
 
-  add_index "options", ["product_id"], name: "index_options_on_product_id", using: :btree
-  add_index "options", ["shop_id"], name: "index_options_on_shop_id", using: :btree
-
   create_table "owners", force: :cascade do |t|
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.integer  "shop_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "shop_id",             limit: 8
     t.string   "name"
     t.string   "email"
     t.string   "domain"
@@ -59,9 +55,8 @@ ActiveRecord::Schema.define(version: 20171103035228) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "product_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "title"
     t.text     "body_html"
     t.string   "vendor"
@@ -69,6 +64,11 @@ ActiveRecord::Schema.define(version: 20171103035228) do
     t.string   "handle"
     t.string   "published_scope"
     t.string   "tags"
+    t.text     "variants"
+    t.text     "options"
+    t.integer  "owner_id",        limit: 8
+    t.string   "image"
+    t.integer  "product_id",      limit: 8
   end
 
   create_table "shops", force: :cascade do |t|
@@ -81,9 +81,9 @@ ActiveRecord::Schema.define(version: 20171103035228) do
   add_index "shops", ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true, using: :btree
 
   create_table "variants", force: :cascade do |t|
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "variant_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "variant_id",             limit: 8
     t.string   "title"
     t.string   "price"
     t.string   "sku"
@@ -103,12 +103,8 @@ ActiveRecord::Schema.define(version: 20171103035228) do
     t.string   "weight_unit"
     t.integer  "old_inventory_quantity"
     t.boolean  "requires_shipping"
-    t.integer  "shop_id"
+    t.integer  "shop_id",                limit: 8
+    t.integer  "product_id",             limit: 8
   end
 
-  add_index "variants", ["shop_id"], name: "index_variants_on_shop_id", using: :btree
-
-  add_foreign_key "options", "products"
-  add_foreign_key "options", "shops"
-  add_foreign_key "variants", "shops"
 end
